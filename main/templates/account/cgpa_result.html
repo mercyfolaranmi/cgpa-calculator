@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CGPA Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #667eea;
+            padding: 20px;
+        }
+        .box {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .result-box {
+            background: #667eea;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .gpa {
+            font-size: 50px;
+            font-weight: bold;
+        }
+        .class {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>CGPA Result</h1>
+        
+        <h2>Your Information</h2>
+        <p><strong>Name:</strong> {{ student_info.name }}</p>
+        <p><strong>Matric:</strong> {{ student_info.matric }}</p>
+        <p><strong>Level:</strong> {{ student_info.level }}</p>
+        <p><strong>Programme:</strong> {{ student_info.programme }}</p>
+        
+        <h2>Your Courses</h2>
+        <table>
+            <tr>
+                <th>Course</th>
+                <th>Unit</th>
+                <th>Score</th>
+                <th>Grade</th>
+                <th>Point</th>
+                <th>Credit Points</th>
+            </tr>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.name }}</td>
+                <td>{{ course.credit_unit }}</td>
+                <td>{{ course.score }}</td>
+                <td>{{ course.grade }}</td>
+                <td>{{ course.point }}</td>
+                <td>{{ course.credit_point }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <div class="result-box">
+            <div class="gpa">{{ result.gpa }}</div>
+            <div class="class">{{ result.classification }}</div>
+            <p>Total Units: {{ result.total_units }}</p>
+            <p>Total Credit Points: {{ result.total_credit_points }}</p>
+        </div>
+        
+        <>
+            <a href="{% url 'cgpa_calculator' %}" class="btn">Calculate Again</a>  <!-- closing result box -->
+         <button onclick="window.print()" class="btn" style="background-color: #17a2b8; margin-left: 10px; border: none; font-size: 14px; padding: 10px 20px;">🖨️ Print Result</button>
+            <a href="{%url 'logout' %}" class="btn" style="background-color: #dc3545; margin-left: 10px;">Logout</a>       
+         </center>
+</body>
+</html>
