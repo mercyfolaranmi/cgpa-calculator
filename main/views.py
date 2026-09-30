@@ -14,9 +14,11 @@ User = get_user_model()
 
 def login_view(request):
     if request.method == 'POST':
-        matric = request.POST.get('matric')
-        password = request.POST.get('password')
-        user = authenticate(request, username=matric, password=password)
+        matric = request.POST.get('matric', '').strip()
+        password = request.POST.get('password', '')
+        account = User.objects.filter(matric_number=matric).first()
+        username = account.username if account else matric
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             return redirect('cgpa_calculator')

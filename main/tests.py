@@ -38,6 +38,13 @@ class CgpaCalculatorTests(TestCase):
 
 		self.assertEqual(Course.objects.count(), 1)
 
+	def test_course_can_have_zero_credit_units(self):
+		response = self.save_semester('2024/2025', 'first', 'COS 100', 'Zero-unit course', 0, 85)
+
+		course = Course.objects.get(code='COS 100')
+		self.assertEqual(course.credit_units, 0)
+		self.assertContains(response, '0 total credit units')
+
 	def test_semester_accepts_more_than_three_courses(self):
 		data = {
 			'academic_year': '2024/2025',
@@ -86,3 +93,38 @@ class CgpaCalculatorTests(TestCase):
 		record = self.client.get('/cgpa/')
 		self.assertContains(record, 'Mercy Folaranmi')
 		self.assertContains(record, 'REG/2026/001')
+
+	def test_another_student_can_sign_up_and_log_in(self):
+		response = self.client.post('/signup/', {
+			'full_name': 'Student Two',
+			'matric': 'REG/2026/002',
+			'password': 'StrongTestPass123!',
+			'confirm_password': 'StrongTestPass123!',
+		})
+
+		self.assertRedirects(response, '/')
+		student = get_user_model().objects.get(matric_number='REG/2026/002')
+		self.client.logout()
+		response = self.client.post('/', {
+			'matric': 'REG/2026/002',
+			'password': 'StrongTestPass123!',
+		})
+
+		self.assertRedirects(response, '/cgpa/')
+		self.assertEqual(self.client.session['_auth_user_id'], str(student.pk))
+
+	def test_login_uses_matric_number_when_it_differs_from_username(self):
+		student = get_user_model().objects.create_user(
+			username='student-account',
+			matric_number='REG/2026/003',
+			password='StrongTestPass123!',
+		)
+		self.client.logout()
+
+		response = self.client.post('/', {
+			'matric': 'REG/2026/003',
+			'password': 'StrongTestPass123!',
+		})
+
+		self.assertRedirects(response, '/cgpa/')
+		self.assertEqual(self.client.session['_auth_user_id'], str(student.pk))

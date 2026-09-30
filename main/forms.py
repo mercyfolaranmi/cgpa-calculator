@@ -26,7 +26,7 @@ class AcademicSessionForm(forms.Form):
 class CourseForm(forms.Form):
     code = forms.CharField(max_length=20, required=False, widget=forms.TextInput(attrs={'placeholder': 'e.g. COS 201'}))
     title = forms.CharField(max_length=120, widget=forms.TextInput(attrs={'placeholder': 'Course title'}))
-    credit_units = forms.IntegerField(min_value=1, max_value=6, widget=forms.NumberInput(attrs={'min': 1, 'max': 6}))
+    credit_units = forms.IntegerField(min_value=0, max_value=6, widget=forms.NumberInput(attrs={'min': 0, 'max': 6}))
     score = forms.IntegerField(min_value=0, max_value=100, widget=forms.NumberInput(attrs={'min': 0, 'max': 100}))
 
 

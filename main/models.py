@@ -57,7 +57,7 @@ class Course(models.Model):
     class Meta:
         ordering = ['code', 'title']
         constraints = [
-            models.CheckConstraint(condition=models.Q(credit_units__gte=1, credit_units__lte=6), name='course_credit_units_1_to_6'),
+            models.CheckConstraint(condition=models.Q(credit_units__gte=0, credit_units__lte=6), name='course_credit_units_0_to_6'),
             models.CheckConstraint(condition=models.Q(score__lte=100), name='course_score_0_to_100'),
         ]
 
